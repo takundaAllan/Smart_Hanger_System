@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Inventory Management</title>
+<style>
+body {
+  font-family: sans-serif;
+  margin: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+#trendChart {
+  width: 900px;
+  height: 500px;
+  margin: 20px auto;
+}
+
+#purchaseForm, #addInventoryForm {
+  margin-bottom: 20px;
+}
+</style>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<body>
+
+<h1>Inventory Management</h1>
+
+<div id="purchaseForm">
+  <label for="productSelect">Select Product:</label>
+  <select id="productSelect">
+  </select>
+  <button onclick="purchaseProduct()">Purchase</button>
+</div>
+
+<div id="addInventoryForm">
+  <label for="addProductName">Product Name:</label>
+  <input type="text" id="addProductName">
+  <label for="addQuantity">Quantity to Add:</label>
+  <input type="number" id="addQuantity">
+  <button onclick="addInventory()">Add Inventory</button>
+</div>
+
+<h2>Inventory</h2>
+<table id="inventoryTable">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Quantity</th>
+      <th>Purchases</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+
+<h2>Purchase Trends</h2>
+<div id="trendChart"></div>
+
+<script>
+let inventory = {
+  "Laptop": { quantity: 10, purchases: 0 },
+  "Mouse": { quantity: 50, purchases: 0 },
+  "Keyboard": { quantity: 30, purchases: 0 },
+  "Monitor": { quantity: 15, purchases: 0 }
+};
+
+function populateProducts() {
+  const select = document.getElementById("productSelect");
+  select.innerHTML = "";
+  for (const product in inventory) {
+    const option = document.createElement("option");
+    option.value = product;
+    option.textContent = product;
+    select.appendChild(option);
+  }
+}
+
+function updateInventoryTable() {
+  const tableBody = document.getElementById("inventoryTable").getElementsByTagName("tbody")[0];
+  tableBody.innerHTML = "";
+
+  for (const product in inventory) {
+    const row = tableBody.insertRow();
+    const cell1 = row.insertCell(0);
+    const cell2 = row.insertCell(1);
+    const cell3 = row.insertCell(2);
+    cell1.textContent = product;
+    cell2.textContent = inventory[product].quantity;
+    cell3.textContent = inventory[product].purchases;
+  }
+}
+
+function purchaseProduct() {
+  const selectedProduct = document.getElementById("productSelect").value;
+  if (inventory[selectedProduct].quantity > 0) {
+    inventory[selectedProduct].quantity--;
+    inventory[selectedProduct].purchases++;
+    updateInventoryTable();
+    drawChart();
+  } else {
+    alert("Out of stock!");
+  }
+}
+
+function addInventory() {
+    const productName = document.getElementById("addProductName").value;
+    const addQuantity = parseInt(document.getElementById("addQuantity").value);
+
+    if (productName && !isNaN(addQuantity) && addQuantity > 0) {
+      if (inventory[productName]) {
+        inventory[productName].quantity += addQuantity;
+      } else {
+        inventory[productName] = { quantity: addQuantity, purchases: 0 };
+        populateProducts();
+      }
+      document.getElementById("addProductName").value = "";
+      document.getElementById("addQuantity").value = "";
+      updateInventoryTable();
+    } else {
+      alert("Please enter a valid product name and quantity.");
+    }
+}
+
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawChart);
+
+function drawChart() {
+  const products = Object.keys(inventory);
+  const dataArray = [['Product', 'Purchases']];
+  products.forEach(product => {
+    dataArray.push([product, inventory[product].purchases]);
+  });
+
+  var data = google.visualization.arrayToDataTable(dataArray);
+
+  var options = {
+    title: 'Purchase Trends'
+  };
+
+  var chart = new google.visualization.PieChart(document.getElementById('trendChart'));
+
+  chart.draw(data, options);
+}
+
+populateProducts();
+updateInventoryTable();
+drawChart();
+
+</script>
+
+</body>
+</html>
