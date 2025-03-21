@@ -64,9 +64,9 @@ function login() {
   const password = document.getElementById('password').value; // In real life, passwords should be hashed and compared server-side.
 
   if (username === 'employee') {
-    window.location.href = 'new.html';
+    window.location.href = 'Employee.html';
   } else if (username === 'till operator') {
-    window.location.href = 'QR2.html';
+    window.location.href = 'TillOperator.html';
   } else {
     alert('Invalid username or password.'); // Basic error handling
   }
