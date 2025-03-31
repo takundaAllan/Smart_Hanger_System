@@ -109,7 +109,7 @@ The web interface provides you with full control over the system, allowing you t
 - The web interface is accessible from any device connected to the same network as the system. Just open a browser and go to `http://localhost:3660` (or your server’s IP address if it’s hosted remotely).
 - The system is designed for use in retail or warehouse environments. You may need to adjust the system settings, such as stock thresholds and product details, based on the specific needs of your business.
 
- ## How to Use the System
+
 
 
 
