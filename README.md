@@ -111,12 +111,7 @@ The web interface provides you with full control over the system, allowing you t
 
  ## How to Use the System
 
-Watch the video below for a tutorial on how to set up and use the Smart Hanger System:
 
-<video width="640" height="360" controls>
-  <source src="assets/tutorial.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
 
 
 
